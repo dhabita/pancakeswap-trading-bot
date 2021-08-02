@@ -280,7 +280,7 @@ var runing = async function(){
 
             
             if(rate>sell_price && balance_token>=sell_amount){ console.log("sell"); AAA.sell(sell_amount); }   
-            if(rate<buy_price  && balance_token>=buy_amount ){ console.log("buy"); AAA.buy(buy_amount); } 
+            if(rate<buy_price  && balance_busd >=buy_amount ){ console.log("buy"); AAA.buy(buy_amount); } 
             
            
         }
