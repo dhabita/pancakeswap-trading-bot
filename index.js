@@ -299,5 +299,5 @@ var runing = async function() {
 
 }
 
-setInterval(runing, 30000);
+setInterval(runing, 60000);
 runing();
