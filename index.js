@@ -1,11 +1,11 @@
 //SETTING TOKEN TO TRADE
 
-var pancakeswap_lp_token = '0x0511e110c536558db3dde405cd334621ca881221'; //PANCAKE_LP_BUSD
-var token_contract = '0x58d6f302aaf33dd30a7666e16909db3c5c74021b'; //TOKEN_TO_TRADE
-var buy_amount = 25;
-var sell_amount = 2500;
-var buy_price1 = 0.018;
-var pecent_profit = 5;
+var pancakeswap_lp_token = '0x14E5C9b5CB59d2Af6D121Bbf5a322c6fE9F18657'; //PANCAKE_LP_BUSD
+var token_contract = '0x6cC76132A84e2095c1F4f2EA71881dAEf8a75D5e'; //TOKEN_TO_TRADE
+var buy_amount = 50;
+var sell_amount = 100;
+var buy_price1 = 0.5;
+var sell_price = 0.75;
 
 
 
@@ -17,11 +17,11 @@ var ENV = process.env;
 var serverbnb = "https://bsc-dataseed1.defibit.io";
 var my_addr = ENV.MY_ADDR;
 var router = '0x10ED43C718714eb63d5aA57B78B54704E256024E';
-var busd = '0xe9e7cea3dedca5984780bafc599bd69add087d56';
+var busd = '0x55d398326f99059fF775485246999027B3197955';
 const web3 = new Web3(serverbnb);
 
 
-var busd_balance = 0;
+
 let deadline = 0;
 var rate = {};
 var rate_coin = 0;
@@ -37,8 +37,16 @@ const myAccount = async() => {
         return false;
     }
 }
-
+let NONCE = 0;
 var AAA = {
+    nonce: async function() {
+
+        let LASTNONCE = await web3.eth.getTransactionCount(
+            my_addr
+        );
+        NONCE = LASTNONCE - 1;
+
+    },
     getrate: async function(c) {
         const web3 = new Web3(serverbnb);
         var abi = [{
@@ -66,7 +74,7 @@ var AAA = {
         try {
             var contract = new web3.eth.Contract(abi, c);
             await contract.methods.getReserves().call().then(function(resp) {
-                rate_coin = (resp[1] / resp[0]);
+                rate_coin = (resp[0] / resp[1]);
                 // console.log(rate_coin);
                 // return rate_coin;
                 // d(rate_coin);
@@ -191,6 +199,7 @@ var AAA = {
         }
     },
     sell: async(amount) => {
+
         var contract = new web3.eth.Contract(router_abi, router);
         let swap, encodedABI, tx, account, gas, gasPrice, amountETH, signedTx;
 
@@ -218,6 +227,7 @@ var AAA = {
             gasPrice = await web3.eth.getGasPrice();
             //amountETH = web3.utils.toWei(amount.toString(), 'ether');
             //console.log(amountETH);
+            NONCE++;
             tx = {
                 from: my_addr,
                 to: router,
@@ -225,6 +235,7 @@ var AAA = {
                 gas: 500000,
                 gasPrice: gasPrice,
                 value: 0,
+                nonce: NONCE
             };
 
 
@@ -256,13 +267,6 @@ var AAA = {
 var runing = async function() {
 
 
-    var dat = (Date.now() - 1628700000000) * 0.00000000001;
-
-    let buy_price = buy_price1 + dat;
-    let sell_price = buy_price * 0.01 * (100 + pecent_profit);
-
-    console.log(buy_price);
-
 
     pause = 0;
     var rate = await AAA.getrate(pancakeswap_lp_token);
@@ -271,33 +275,30 @@ var runing = async function() {
     var balance_token = await AAA.balance(token_contract, my_addr, 18);
 
     rate = (rate * 1).toFixed(8);
-    //supply = (supply*1);
     balance_busd = (balance_busd * 1).toFixed(8);
     balance_token = (balance_token * 1).toFixed(8);
-
-
     console.log(rate);
-    //console.log(supply);
     console.log(balance_busd);
     console.log(balance_token);
 
 
+    await AAA.nonce();
+
+    if (rate > 0) {} else return;
 
 
-    if (rate > 0) { console.log("a"); } else return;
-
-
-    if (rate > sell_price && balance_token >= sell_amount) {
-        console.log("sell");
-        AAA.sell(sell_amount);
-    }
-    if (rate < buy_price && balance_busd >= buy_amount) {
-        console.log("buy");
-        AAA.buy(buy_amount);
-    }
+    if (NONCE > 0)
+        if (rate > sell_price && balance_token >= sell_amount) {
+            console.log("sell");
+            AAA.sell(sell_amount);
+        }
+        // if (rate < buy_price && balance_busd >= buy_amount) {
+        //     console.log("buy");
+        //     AAA.buy(buy_amount);
+        // }
 
 
 }
 
-setInterval(runing, 60000);
+setInterval(runing, 30000);
 runing();
