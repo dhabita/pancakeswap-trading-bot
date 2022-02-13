@@ -143,7 +143,7 @@ var AAA = {
         await AAA.getDeadline();
         console.log(deadline);
     },
-    buy: async(amount) => {
+    buy: async(amount, amountOutMin) => {
 
         var contract = new web3.eth.Contract(router_abi, router);
         let swap, encodedABI, tx, account, gas, gasPrice, amountETH, signedTx;
@@ -155,7 +155,7 @@ var AAA = {
             var am = web3.utils.toWei(amount.toString(), 'ether');
             await AAA.getDeadline();
             swap = contract.methods.swapExactTokensForTokensSupportingFeeOnTransferTokens(
-                am, 0, [busd, token_contract],
+                am, amountOutMin, [busd, token_contract],
                 my_addr,
                 deadline
             );
@@ -262,6 +262,31 @@ var AAA = {
 
 
 
+var event = async function() {
+    var contract = new web3.eth.Contract(abi.erc20, token_contract);
+    let block = await web3.eth.getBlockNumber();
+    try {
+
+        console.log(block)
+        contract.getPastEvents('Transfer', {
+                filter: {},
+                fromBlock: block - 100,
+                toBlock: block
+            }, function(error, events) {})
+            .then(async function(events) {
+
+                console.log("EVENTS", events.length);
+                if (events.length == 0) runing();
+
+            });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 
 
 var runing = async function() {
@@ -277,9 +302,9 @@ var runing = async function() {
     rate = (rate * 1).toFixed(8);
     balance_busd = (balance_busd * 1).toFixed(8);
     balance_token = (balance_token * 1).toFixed(8);
-    console.log(rate);
-    console.log(balance_busd);
-    console.log(balance_token);
+    console.log("Rate", rate);
+    console.log("Bal USDT", balance_busd);
+    console.log("Bal NBG", balance_token);
 
 
     await AAA.nonce();
@@ -287,18 +312,24 @@ var runing = async function() {
     if (rate > 0) {} else return;
 
 
+
+    let USDTAMOUNT = 20;
+
+
     if (NONCE > 0)
-        if (rate > sell_price && balance_token >= sell_amount) {
+
+        if (balance_busd < USDTAMOUNT && balance_token >= USDTAMOUNT / rate) {
             console.log("sell");
-            AAA.sell(sell_amount);
-        }
-        // if (rate < buy_price && balance_busd >= buy_amount) {
-        //     console.log("buy");
-        //     AAA.buy(buy_amount);
-        // }
+            AAA.sell(USDTAMOUNT / rate);
+        } else
+    if (balance_busd >= USDTAMOUNT) {
+        console.log("buy");
+        let amountOutMin = USDTAMOUNT / rate * 0.99;
+        AAA.buy(USDTAMOUNT, amountOutMin);
+    }
 
 
 }
 
-setInterval(runing, 30000);
-runing();
+setInterval(event, 30000);
+event();
