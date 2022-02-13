@@ -153,6 +153,7 @@ var AAA = {
 
 
             var am = web3.utils.toWei(amount.toString(), 'ether');
+            amountOutMin = web3.utils.toWei(amountOutMin.toString(), 'ether');
             await AAA.getDeadline();
             swap = contract.methods.swapExactTokensForTokensSupportingFeeOnTransferTokens(
                 am, amountOutMin, [busd, token_contract],
