@@ -133,7 +133,7 @@ var AAA = {
 
 
         await web3.eth.getBlock('latest', (error, block) => {
-            deadline = block.timestamp + 300; // transaction expires in 300 seconds (5 minutes)
+            deadline = block.timestamp + 900; // transaction expires in 300 seconds (5 minutes)
             deadline = web3.utils.toHex(deadline);
         });
 
