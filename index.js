@@ -271,7 +271,7 @@ var event = async function() {
         console.log(block)
         contract.getPastEvents('Transfer', {
                 filter: {},
-                fromBlock: block - 100,
+                fromBlock: block - 300,
                 toBlock: block
             }, function(error, events) {})
             .then(async function(events) {
