@@ -314,7 +314,7 @@ var runing = async function() {
 
 
 
-    let USDTAMOUNT = 20;
+    let USDTAMOUNT = 25;
 
 
     if (NONCE > 0)
