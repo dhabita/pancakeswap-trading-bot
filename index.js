@@ -316,7 +316,7 @@ var runing = async function() {
 
 
 
-    let USDTAMOUNT = Math.random() * 20 + 15;
+    let USDTAMOUNT = Math.random() * 30 + 20;
 
 
     if (NONCE > 0)
