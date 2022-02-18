@@ -271,10 +271,12 @@ var event = async function() {
         console.log(block)
         contract.getPastEvents('Transfer', {
                 filter: {},
-                fromBlock: block - 300,
+                fromBlock: block - 60,
                 toBlock: block
             }, function(error, events) {})
             .then(async function(events) {
+
+                console.log(events);
 
                 console.log("EVENTS", events.length);
                 if (events.length == 0) runing();
