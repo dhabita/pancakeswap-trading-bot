@@ -271,7 +271,7 @@ var event = async function() {
         console.log(block)
         contract.getPastEvents('Transfer', {
                 filter: {},
-                fromBlock: block - 60,
+                fromBlock: block - 120,
                 toBlock: block
             }, function(error, events) {})
             .then(async function(events) {
@@ -316,7 +316,7 @@ var runing = async function() {
 
 
 
-    let USDTAMOUNT = 25;
+    let USDTAMOUNT = Math.random() * 10 + 20;
 
 
     if (NONCE > 0)
