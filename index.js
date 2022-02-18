@@ -325,11 +325,12 @@ var runing = async function() {
             console.log("sell");
             AAA.sell(USDTAMOUNT / rate);
         } else
-    if (balance_busd >= USDTAMOUNT) {
-        console.log("buy");
-        let amountOutMin = USDTAMOUNT / rate * 0.99;
-        AAA.buy(USDTAMOUNT, amountOutMin);
-    }
+    if (balance_busd >= USDTAMOUNT)
+        if (rate < 0.5) {
+            console.log("buy");
+            let amountOutMin = USDTAMOUNT / rate * 0.99;
+            AAA.buy(USDTAMOUNT, amountOutMin);
+        }
 
 
 }
