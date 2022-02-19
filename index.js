@@ -279,7 +279,9 @@ var event = async function() {
                 console.log(events);
 
                 console.log("EVENTS", events.length);
-                if (events.length == 0) runing();
+                if (events.length == 0) runing(0);
+                else
+                    runing(1);
 
             });
 
@@ -292,7 +294,7 @@ var event = async function() {
 
 
 
-var runing = async function() {
+var runing = async function(send) {
 
 
 
@@ -317,20 +319,26 @@ var runing = async function() {
 
 
     let USDTAMOUNT = Math.random() * 30 + 20;
+    let BUYPRICE = 0.5;
+    let SELLPRICE = 0.75;
 
 
-    if (NONCE > 0)
+    if (send == 1)
+        if (balance_token >= USDTAMOUNT / rate)
+            if (rate > SELLPRICE) {
+                console.log("sell");
+                AAA.sell(USDTAMOUNT / rate);
+            }
 
-        if (balance_busd < USDTAMOUNT && balance_token >= USDTAMOUNT / rate) {
-            console.log("sell");
-            AAA.sell(USDTAMOUNT / rate);
-        } else
-    if (balance_busd >= USDTAMOUNT)
-        if (rate < 0.5) {
-            console.log("buy");
-            let amountOutMin = USDTAMOUNT / rate * 0.99;
-            AAA.buy(USDTAMOUNT, amountOutMin);
-        }
+
+
+    if (send == 0)
+        if (balance_busd >= USDTAMOUNT)
+            if (rate < BUYPRICE) {
+                console.log("buy");
+                let amountOutMin = USDTAMOUNT / rate * 0.99;
+                AAA.buy(USDTAMOUNT, amountOutMin);
+            }
 
 
 }
