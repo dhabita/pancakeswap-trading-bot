@@ -320,14 +320,16 @@ var runing = async function(send) {
 
     let USDTAMOUNT = Math.random() * 30 + 20;
     let BUYPRICE = 1;
-    let SELLPRICE = 1.2;
+    let SELLPRICE = 1.3;
+
+    let USDTAMOUNTS = Math.random() * 50 + 50;
 
 
     if (send == 1)
-        if (balance_token >= USDTAMOUNT / rate)
+        if (balance_token >= USDTAMOUNTS / rate)
             if (rate > SELLPRICE) {
                 console.log("sell");
-                AAA.sell(USDTAMOUNT / rate);
+                AAA.sell(USDTAMOUNTS / rate);
             }
 
 
