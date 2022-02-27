@@ -319,8 +319,8 @@ var runing = async function(send) {
 
 
     let USDTAMOUNT = Math.random() * 30 + 20;
-    let BUYPRICE = 0.7;
-    let SELLPRICE = 1;
+    let BUYPRICE = 1;
+    let SELLPRICE = 1.2;
 
 
     if (send == 1)
