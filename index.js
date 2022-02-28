@@ -322,7 +322,7 @@ var runing = async function(send) {
     let BUYPRICE = 1;
     let SELLPRICE = 1.3;
 
-    let USDTAMOUNTS = Math.random() * 50 + 50;
+    let USDTAMOUNTS = Math.random() * 100 + 300;
 
 
     if (send == 1)
