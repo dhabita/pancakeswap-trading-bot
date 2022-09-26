@@ -19,6 +19,6 @@
   "homepage": "https://github.com/dhabita/pancakeswap-trading-bot#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "web3": "^1.5.0"
+    "web3": "^1.8.0"
   }
 }
